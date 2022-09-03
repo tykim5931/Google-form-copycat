@@ -16,7 +16,6 @@ export const titleSlice = createSlice ({
     reducers:{
         titleAdded(state, action) {
             const {title, info} = action.payload;
-            console.log(title);
             state.title = title;
             state.info = info;
         }

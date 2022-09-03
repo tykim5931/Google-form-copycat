@@ -10,7 +10,6 @@ const AddPostForm = () => {
     const dispatch = useDispatch()
 
     const forminfo = useSelector((state:RootState) => state.title)
-    console.log(forminfo)
     const [form, setForm] = useState({
         title: forminfo.title,
         info: forminfo.info,
@@ -20,6 +19,11 @@ const AddPostForm = () => {
             ...form,
             [name]:value,
         });
+    }
+
+    const onTitleChanged = (e:any) => setFormInfo('title', e.target.value)
+    const onInfoChanged = (e:any) => setFormInfo('info', e.target.value)
+    const onClickSave = () => {
         dispatch(
             titleAdded({
                 id: nanoid(),
@@ -29,11 +33,8 @@ const AddPostForm = () => {
         )
     }
 
-    const onTitleChanged = (e:any) => setFormInfo('title', e.target.value)
-    const onInfoChanged = (e:any) => setFormInfo('info', e.target.value)
-
     return (
-        <div className="container">
+        <div className="container" onClick={onClickSave}>
             <input 
                 type="text"
                 id="formTitle"
