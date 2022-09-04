@@ -3,10 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 
-import { questionAdd, questionAnswered, questionMod, questionDelete} from "./questionSlice";
+import { questionAdd, questionAnswered, questionAskMod, questionDelete} from "./questionSlice";
 import { Question } from './questionSlice';
-import DropDown from "../../components/DropDown";
+import Dropdown from "../../components/Dropdown";
 import './style.css'
+
+
+const options = [
+    { id: 0, content: '단답형' },
+    { id: 1, content: '장문형' },
+    { id: 2, content: '객관식 질문'},
+    { id: 3, content: '체크박스'},
+    { id: 4, content: '드롭다운'},
+  ];
+
 
 interface QuestionProps {
     questionId: string;
@@ -20,7 +30,7 @@ const QuestionBox = ({questionId}: QuestionProps) => {
     if (!question) return null;
 
     const onAskChanged = (e:any) => {
-        // dispatch ask changed
+        dispatch(questionAskMod({ id: question.id, ask: e.target.value }))
     }
     
     const onDeleteQuestion = () => {
@@ -31,8 +41,6 @@ const QuestionBox = ({questionId}: QuestionProps) => {
         // setSelectOption(type);
         // dispatch typechanged
     };
-
-    const onClickSave = () => dispatch( questionMod({question}) )
 
 
     // // drop down - nav
@@ -54,7 +62,7 @@ const QuestionBox = ({questionId}: QuestionProps) => {
     // };
 
     return (
-        <div className="container" onClick={onClickSave} id="questionBox" key={question.id}>
+        <div className="container" id="questionBox" key={question.id}>
             <div>
                 <input 
                     type="text"
@@ -64,25 +72,7 @@ const QuestionBox = ({questionId}: QuestionProps) => {
                     placeholder="질문"
                     onChange={onAskChanged}
                 />
-                {/* <button
-                    id="optionBtn"
-                    className={showDropDown ? "active" : undefined}
-                    onClick={(): void => toggleDropDown()}
-                    onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
-                    dismissHandler(e)
-                    }
-                >
-                    <div>{selectOption ? selectOption : questionOptions()[0]} </div>
-
-                    {showDropDown && (
-                    <DropDown
-                        options={questionOptions()}
-                        showDropDown={false}
-                        toggleDropDown={(): void => toggleDropDown()}
-                        optionSelection={onTypeChanged}
-                    />
-                    )}
-                </button> */}
+                <Dropdown questionId={questionId} options={options} />
             </div>
 
             <br></br>

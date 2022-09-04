@@ -1,53 +1,67 @@
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@mui/material';
+
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../app/store';
+import { questionSelectedMod, questionTypeMod } from '../feature/question/questionSlice';
 import "./style.css";
 
-type DropDownProps = {
-  options: string[];
-  showDropDown: boolean;
-  toggleDropDown: Function;
-  optionSelection: Function;
+interface OptionProps {
+    id: number;
+    content : string;
+}
+
+interface DropDownProps {
+    questionId : string;
+    options: OptionProps[];
+    isAnswer?: boolean;
 };
 
-const DropDown: React.FC<DropDownProps> = ({
-    options,
-    optionSelection,
-}: DropDownProps): JSX.Element => {
-  const [showDropDown, setShowDropDown] = useState<boolean>(false);
+const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
+    const dispatch = useDispatch();
+    const theme = unstable_createMuiStrictModeTheme();
+    const questions = useSelector((state:RootState) => state.questions)
 
-  /**
-   * Handle passing the city name
-   * back to the parent component
-   *
-   * @param city  The selected city
-   */
-  const onClickHandler = (option: string): void => {
-    optionSelection(option);
-  };
+    const question = questions.find((item) => item.id === questionId);
+    if (!question) return null;
 
-  useEffect(() => {
-    setShowDropDown(showDropDown);
-  }, [showDropDown]);
+    const {type: questionType, selected} = question;
+    const selectedAns = selected.length > 0 ? selected[0] : '';
+
+    const onTypeChanged = (e: any) => {
+        dispatch(questionTypeMod({id: questionId, type: e.target.value}))
+    }
+
+    const onSelectedChanged = (e: any) => {
+        dispatch(questionSelectedMod({id: questionId, optionId: e.target.value, isAnswer}))
+    }
+
+    const showValue = () => {
+        // if preview or result, show selectedAns
+        return questionType
+    }
 
   return (
     <>
-      <div className={showDropDown ? 'dropdown' : 'dropdown active'}>
-        {options.map(
-          (option: string, index: number): JSX.Element => {
-            return (
-              <p
-                key={index}
-                onClick={(): void => {
-                  onClickHandler(option);
-                }}
-              >
-                {option}
-              </p>
-            );
-          }
-        )}
-      </div>
+    <ThemeProvider theme={theme}>
+        <Select 
+            onChange={onTypeChanged}
+            className='dropdown'
+            disableUnderline
+            disabled={false}
+            value={showValue()}
+            >
+            {options.map((option) => (
+                <MenuItem key={option.id} value={option.id} className="dropdownComp">
+                    <div className='menu-content'>{option.content}</div>
+                </MenuItem>
+            ))}
+        </Select>
+    </ThemeProvider>
     </>
   );
 };
 
-export default DropDown;
+export default Dropdown;

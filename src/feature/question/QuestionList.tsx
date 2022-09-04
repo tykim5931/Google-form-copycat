@@ -5,7 +5,6 @@ import { RootState } from '../../app/store';
 
 import { questionAdd, questionAnswered } from "./questionSlice";
 import QuestionBox from './QuestionBox';
-import Menu from "../../components/Menu";
 import './style.css'
 
 const QuestionList = () => {

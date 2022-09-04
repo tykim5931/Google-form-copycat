@@ -6,17 +6,24 @@ import { RootState } from '../../app/store';
 import { questionAdd } from '../question/questionSlice';
 import './style.css'
 
+
+interface OptionProps {
+  id: number;
+  content : string;
+}
+
+
 const SideBar = () => {
   const dispatch = useDispatch()
   
   const onNewQuestionClicked = () => {
     const newQuestion = {
       id: nanoid(),
-      type: '단답형',
+      type: 0,
       isnecessary: false,
       ask: '',
       answer: '',
-      options: ['옵션1'],
+      options: [{id:0, content:'옵션1'}],
       selected: [],
     }
     dispatch(questionAdd(newQuestion))
