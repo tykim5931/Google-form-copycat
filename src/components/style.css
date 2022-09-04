@@ -29,3 +29,7 @@
     width: 100%;
     align-items: center;
 }
+.dropdown-option{
+    font-size: 17px;
+    margin: 8px;
+}

@@ -37,7 +37,7 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
     };
     const onOptionDelete = () => {
         dispatch(questionOptionDelete({ id: questionId, optionId }));
-    }
+    };
 
     const showOptionButton = () => {
         switch (type) {
@@ -61,7 +61,7 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
                 )
             case 4: // 드롭다운
                 return <div className = "dropdown-option">{optionId}</div>
-                
+
             default:
                 return;
         }

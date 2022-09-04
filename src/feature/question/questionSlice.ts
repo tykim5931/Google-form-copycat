@@ -1,5 +1,4 @@
 import {createSlice, nanoid} from "@reduxjs/toolkit"
-import { type } from "os";
 
 interface OptionProps {
     id: number;
@@ -96,6 +95,11 @@ export const questionSlice = createSlice ({
             const optionIdx = state[questionId].options.findIndex((item) => item.id === Number(optionId));
             if(optionIdx > -1) state[questionId].options.splice(optionIdx, 1);
             state[questionId].options.map((item, i) => item.id = i+1)
+        },
+        questionNecessary(state, action){
+            const id = action.payload;
+            const questionId = state.findIndex((item) => item.id === String(id));
+            state[questionId].isnecessary = !state[questionId].isnecessary; // switch necessary
         }
     }
 })
@@ -103,7 +107,7 @@ export const questionSlice = createSlice ({
 export const { questionAdd, questionAskMod, questionCopy, 
                 questionDelete, questionTypeMod, questionSelectedMod, 
                 questionAnswerMod, questionOptionAdd, questionOptionMod,
-                questionOptionDelete
+                questionOptionDelete, questionNecessary
             } = questionSlice.actions;
 
 export default questionSlice.reducer;

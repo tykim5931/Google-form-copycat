@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "@reduxjs/toolkit";
+import { Switch } from '@mui/material';
 import { RootState } from '../../app/store';
 
-import { questionAskMod, questionDelete, questionCopy} from "./questionSlice";
+import { questionAskMod, questionDelete, questionCopy, questionNecessary} from "./questionSlice";
 import {Narrative, Optional} from '../../components';
 import Dropdown from "../../components/Dropdown";
 import './style.css'
@@ -44,6 +44,9 @@ const QuestionBox = ({questionId}: QuestionProps) => {
     }
     const onCopyQuestion = () => {
         dispatch(questionCopy(question.id))
+    }
+    const onNecessarySwitch = () => {
+        dispatch(questionNecessary(questionId));
     }
 
     const questionOptions = question.options;
@@ -119,6 +122,8 @@ const QuestionBox = ({questionId}: QuestionProps) => {
                     onClick={onCopyQuestion}>
                     <img src={require("../../assets/copy_icon.png")} />
                 </button>
+                <p>필수</p>
+                <Switch className="switch" checked={question.isnecessary} onChange={onNecessarySwitch} />
             </div>
             }
 

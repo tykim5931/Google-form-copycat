@@ -23,7 +23,7 @@ const SideBar = () => {
       isnecessary: false,
       ask: '',
       answer: '',
-      options: [{id:0, content:'옵션1'}],
+      options: [{id:1, content:'옵션1'}],
       selected: [],
     }
     dispatch(questionAdd(newQuestion))

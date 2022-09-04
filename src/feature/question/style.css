@@ -31,9 +31,6 @@ input {
     max-width: 600px;
     display: inline-block;
 }
-.container:hover{
-    /* transform: scale(1.05) perspective(1px); */
-}
 body{
     background-color:wheat;
     align-items: center;
@@ -46,4 +43,9 @@ body{
     margin-left: 30px;
     font-size: 15px;
     width: 30%;
+}
+.btnBarContainer{
+    display: flex;
+    width: fit-content;
+    align-items: center;
 }
