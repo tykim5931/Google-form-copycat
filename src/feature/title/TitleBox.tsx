@@ -6,7 +6,7 @@ import { RootState } from '../../app/store';
 import { titleAdded } from "./titleSlice";
 import './style.css'
 
-const AddPostForm = () => {
+const TitleBox = () => {
     const dispatch = useDispatch()
 
     const forminfo = useSelector((state:RootState) => state.title)
@@ -34,7 +34,7 @@ const AddPostForm = () => {
     }
 
     return (
-        <div className="container" onClick={onClickSave}>
+        <div className="container" onClick={onClickSave} id="titleBox">
             <input 
                 type="text"
                 id="formTitle"
@@ -57,4 +57,4 @@ const AddPostForm = () => {
 }
 
 
-export default AddPostForm;
+export default TitleBox;

@@ -1,7 +1,7 @@
-#formTitle {
-    font-size: 30px;
-    width: 90%;
-    max-width: 600px;
+#ask {
+    font-size: 17px;
+    width: 60%;
+    border-bottom: solid 1px grey;
 }
 #formInfo {
     margin-top: 15px;
@@ -30,13 +30,9 @@ input {
     height: fit-content;
     max-width: 600px;
     display: inline-block;
-    margin: 10px;
 }
 .container:hover{
     /* transform: scale(1.05) perspective(1px); */
-}
-#titleBox{
-    border-top: 12px solid salmon;
 }
 body{
     background-color:wheat;

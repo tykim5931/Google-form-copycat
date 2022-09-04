@@ -1,11 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import postsReducer from '../feature/posts/postsSlice';
 import titleReducer from '../feature/title/titleSlice';
+import questionReducer from '../feature/question/questionSlice';
 
 export const store = configureStore({
   reducer: {
-    posts: postsReducer,
-    title: titleReducer
+    title: titleReducer,
+    questions: questionReducer
   },
 });
 
