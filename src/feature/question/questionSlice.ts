@@ -89,13 +89,21 @@ export const questionSlice = createSlice ({
             const questionId = state.findIndex((item) => item.id === String(id));
             const optionIdx = state[questionId].options.findIndex((item) => item.id === Number(optionId));
             state[questionId].options[optionIdx].content = content;
-            console.log(state[questionId].options[optionIdx].content)
+        },
+        questionOptionDelete(state, action){
+            const { id, optionId } = action.payload;
+            const questionId = state.findIndex((item) => item.id === String(id));
+            const optionIdx = state[questionId].options.findIndex((item) => item.id === Number(optionId));
+            if(optionIdx > -1) state[questionId].options.splice(optionIdx, 1);
+            state[questionId].options.map((item, i) => item.id = i+1)
         }
     }
 })
 
 export const { questionAdd, questionAskMod, questionCopy, 
                 questionDelete, questionTypeMod, questionSelectedMod, 
-                questionAnswerMod, questionOptionAdd, questionOptionMod} = questionSlice.actions;
+                questionAnswerMod, questionOptionAdd, questionOptionMod,
+                questionOptionDelete
+            } = questionSlice.actions;
 
 export default questionSlice.reducer;

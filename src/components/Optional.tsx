@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { RootState } from '../app/store';
 import { Radio, Checkbox } from '@mui/material';
 
-import { questionOptionAdd, questionOptionMod, questionSelectedMod} from "../feature/question/questionSlice";
+import { questionOptionAdd, questionOptionMod, questionSelectedMod, questionOptionDelete} from "../feature/question/questionSlice";
 import "./style.css"
 import React from 'react';
 
@@ -35,6 +35,9 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
     const onOptionMod = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(questionOptionMod({ id: questionId, optionId, content: e.target.value }));
     };
+    const onOptionDelete = () => {
+        dispatch(questionOptionDelete({ id: questionId, optionId }));
+    }
 
     const showOptionButton = () => {
         switch (type) {
@@ -58,6 +61,7 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
                 )
             case 4: // 드롭다운
                 return <div className = "dropdown-option">{optionId}</div>
+                
             default:
                 return;
         }
@@ -76,6 +80,12 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
             ) : ( // if result/previewpage
                 <div className='previewOption'>{optionContent}</div>
             )}
+            {(!isLast && isEdit) &&
+            <button 
+                id="cancelBtn"
+                onClick={onOptionDelete}>
+                <img src={require("../assets/cancel_icon.png")} />
+            </button>} 
         </div>
         </>
     );
