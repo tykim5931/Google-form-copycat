@@ -100,6 +100,13 @@ export const questionSlice = createSlice ({
             const id = action.payload;
             const questionId = state.findIndex((item) => item.id === String(id));
             state[questionId].isnecessary = !state[questionId].isnecessary; // switch necessary
+        },
+        questionAnswerInit(state, action){
+            state.map(item => {
+                item.answer = '';
+                item.selected = [];
+            })
+            console.log(state);
         }
     }
 })
@@ -107,7 +114,7 @@ export const questionSlice = createSlice ({
 export const { questionAdd, questionAskMod, questionCopy, 
                 questionDelete, questionTypeMod, questionSelectedMod, 
                 questionAnswerMod, questionOptionAdd, questionOptionMod,
-                questionOptionDelete, questionNecessary
+                questionOptionDelete, questionNecessary, questionAnswerInit
             } = questionSlice.actions;
 
 export default questionSlice.reducer;

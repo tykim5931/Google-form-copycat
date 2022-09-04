@@ -1,7 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {BrowserRouter as Router, Link} from 'react-router-dom';
+import {BrowserRouter as Router, Link, useLocation} from 'react-router-dom';
 import { RootState } from '../../app/store';
 import { questionAdd } from '../question/questionSlice';
 import './style.css'
@@ -16,6 +16,11 @@ interface OptionProps {
 const SideBar = () => {
   const dispatch = useDispatch()
   
+  const location = useLocation()
+  const isPreview = location.pathname === '/preview';
+  const isResult = location.pathname === '/result';
+  const isEdit = !isPreview && !isResult;
+  
   const onNewQuestionClicked = () => {
     const newQuestion = {
       id: nanoid(),
@@ -29,11 +34,18 @@ const SideBar = () => {
     dispatch(questionAdd(newQuestion))
   }
 
+  if(isPreview){
+    return (
+      <div className="floatingContainer">
+      <Link to="/">
+          <button><img src={require("../../assets/preview_undo_icon.png")} /></button>
+      </Link>
+    </div>
+    )
+  }
   return (
     <div className="floatingContainer">
-      <button
-        onClick={onNewQuestionClicked}
-      >
+      <button onClick={onNewQuestionClicked}>
         <img src={require("../../assets/add_icon.png")} />
       </button>
       <Link to="/preview">

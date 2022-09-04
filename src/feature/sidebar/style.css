@@ -13,6 +13,7 @@
     align-items: center;
     padding: 3px;
     box-shadow: 5px 5px 5px lightsalmon;
+    object-fit: fill;
 }
 button{
     background-color: white;
