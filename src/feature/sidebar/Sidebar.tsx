@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {BrowserRouter as Router, Link, useLocation} from 'react-router-dom';
 import { RootState } from '../../app/store';
 import { questionAdd } from '../question/questionSlice';
+import '../../index.css'
 import './style.css'
 
 

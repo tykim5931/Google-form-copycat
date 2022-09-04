@@ -7,7 +7,8 @@ import { RootState } from '../../app/store';
 import { questionAskMod, questionDelete, questionCopy, questionNecessary} from "./questionSlice";
 import {Narrative, Optional} from '../../components';
 import Dropdown from "../../components/Dropdown";
-import './style.css'
+import'../../index.css';
+import './style.css';
 
 
 const options = [

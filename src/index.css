@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: wheat;
 }
 
 code {
@@ -16,12 +17,67 @@ code {
   padding:20px;
 }
 
+/* ResultPage */
 .formCanvas{
-  width: fit-content;
   height: fit-content;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   padding: 3px;
-  max-width: 600px;
+  width: 600px;
   display: inline-block;
+}
+.formResult{
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border-left: solid 10px lightblue;
+  padding: 10px;
+  width: 100%;
+  height: fit-content;
+}
+.formResultComp{
+  width:90%;
+  background-color: white;
+  border: none;
+  border-bottom: 1px solid lightblue;
+  text-align: left;
+  margin-left: 30px;
+}
+
+/* TitleBox */
+#formTitle {
+  font-size: 30px;
+  width: 90%;
+  max-width: 600px;
+}
+#formInfo {
+  margin-top: 15px;
+  font-size: 17px;
+}
+input {
+  border: none;
+  margin-left: 15px;
+  overflow: visible;
+  width: 90%;
+  height:fit-content;
+  outline: none;
+  padding: 3px;
+  overflow: visible;
+}
+
+.container {
+  background-color: white;
+  border-radius: 10px;
+  text-align: left;
+  border-left: 10px solid lightblue none;
+  padding: 30px;
+  width: 95%;
+  height: fit-content;
+  display: block;
+  margin-top:10px;
+  margin-bottom: 10px;
+}
+#titleBox{
+  border-top: 12px solid salmon;
 }

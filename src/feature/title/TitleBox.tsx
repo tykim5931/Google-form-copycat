@@ -4,7 +4,8 @@ import { nanoid } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 
 import { titleMod, infoMod } from "./titleSlice";
-import './style.css'
+import '../../index.css';
+import './style.css';
 import { useLocation } from 'react-router-dom';
 
 const TitleBox = () => {
