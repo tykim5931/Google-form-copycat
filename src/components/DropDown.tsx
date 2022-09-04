@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { questionSelectedMod, questionTypeMod } from '../feature/question/questionSlice';
 import "./style.css";
+import { useLocation } from 'react-router-dom';
 
 interface OptionProps {
     id: number;
@@ -22,8 +23,13 @@ interface DropDownProps {
 const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
     const dispatch = useDispatch();
     const theme = unstable_createMuiStrictModeTheme();
-    const questions = useSelector((state:RootState) => state.questions)
+    
+    const location = useLocation()
+    const isPreview = location.pathname === '/preview';
+    const isResult = location.pathname === '/result';
+    const isEdit = !isPreview && !isResult;
 
+    const questions = useSelector((state:RootState) => state.questions)
     const question = questions.find((item) => item.id === questionId);
     if (!question) return null;
 
@@ -39,6 +45,12 @@ const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
     }
 
     const showValue = () => {
+        if (!isEdit) {
+            const selectedOption = question.options.find(item => item.id == question.selected[0]);
+            // if (selectedOption === undefined) return;
+            const selectedContent = selectedOption? selectedOption.id : 1;
+            return selectedContent;
+        }
         // if preview or result, show selectedAns
         return questionType
     }
@@ -47,7 +59,7 @@ const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
     <>
     <ThemeProvider theme={theme}>
         <Select 
-            onChange={onTypeChanged}
+            onChange={isEdit? onTypeChanged : onSelectedChanged}
             className='dropdown'
             disabled={false}
             value={showValue()}

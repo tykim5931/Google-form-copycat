@@ -38,7 +38,6 @@ const QuestionBox = ({questionId}: QuestionProps) => {
     const onAskChanged = (e:any) => {
         dispatch(questionAskMod({ id: question.id, ask: e.target.value }))
     }
-    
     const onDeleteQuestion = () => {
         dispatch(questionDelete(question.id))
     }
@@ -49,9 +48,26 @@ const QuestionBox = ({questionId}: QuestionProps) => {
         dispatch(questionNecessary(questionId));
     }
 
+
     const questionOptions = question.options;
     const selectedOptions = question.selected;
+
+    const getSelectedItem = () => {
+        const selectedId: number = selectedOptions[0];
+        const optionContent = questionOptions.find(item => item.id === selectedId);
+        if (optionContent === undefined) return "";
+        return optionContent.content;
+    }
+
     const optionComp = (type: number) => {
+        if (type == 4) { // dropdown
+            if (isPreview) return (
+                <div className="answerBox">
+                    <Dropdown questionId={questionId} options={question.options} />
+                </div>
+            )
+            else if (isResult) return <div>{getSelectedItem()}</div>
+        }
         let optionList = questionOptions?.map( option => (
             <Optional 
                 key={option.id}
@@ -94,9 +110,14 @@ const QuestionBox = ({questionId}: QuestionProps) => {
         }
     }
 
+    const redfontStyle = {
+        color: "red"
+    }
+
     return (
         <div className="container" id="questionBox" key={question.id}>
-            <div>
+            <div className="flexContainer">
+                {(isPreview && question.isnecessary) && <p style={redfontStyle}>*</p>}
                 <input 
                     type="text"
                     id="ask"
@@ -130,6 +151,5 @@ const QuestionBox = ({questionId}: QuestionProps) => {
         </div>
     )
 }
-
 
 export default QuestionBox;

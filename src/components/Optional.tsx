@@ -59,12 +59,17 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
                         checked={isEdit? false : isAnswer}
                     />
                 )
-            case 4: // 드롭다운
+            case 4: 
                 return <div className = "dropdown-option">{optionId}</div>
 
             default:
                 return;
         }
+    }
+
+    const optionStyle = () => {
+        if(isLast) return {color:"grey"}
+        return {color:"black"}
     }
     return (
         <>
@@ -76,6 +81,7 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
                     value={optionContent}
                     onChange={onOptionMod}
                     onClick={onOptionAdd}
+                    style={optionStyle()}
                 />
             ) : ( // if result/previewpage
                 <div className='previewOption'>{optionContent}</div>

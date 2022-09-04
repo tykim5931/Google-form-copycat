@@ -14,14 +14,17 @@ export const titleSlice = createSlice ({
     name: 'title',
     initialState,
     reducers:{
-        titleAdded(state, action) {
-            const {title, info} = action.payload;
+        titleMod(state, action) {
+            const title = action.payload;
             state.title = title;
+        },
+        infoMod(state, action) {
+            const info = action.payload;
             state.info = info;
         }
     }
 })
 
-export const { titleAdded } = titleSlice.actions;
+export const { titleMod, infoMod } = titleSlice.actions;
 
 export default titleSlice.reducer;

@@ -49,3 +49,6 @@ body{
     width: fit-content;
     align-items: center;
 }
+.answerBox{
+    padding-top: 20px;
+}

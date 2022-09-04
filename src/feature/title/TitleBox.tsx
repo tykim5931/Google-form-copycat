@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 
-import { titleAdded } from "./titleSlice";
+import { titleMod, infoMod } from "./titleSlice";
 import './style.css'
 import { useLocation } from 'react-router-dom';
 
@@ -16,36 +16,21 @@ const TitleBox = () => {
     const isEdit = !isPreview && !isResult;
     
     const forminfo = useSelector((state:RootState) => state.title)
-    const [form, setForm] = useState({
-        title: forminfo.title,
-        info: forminfo.info,
-    })
-    const setFormInfo = (name: string, value: string) => {
-        setForm({
-            ...form,
-            [name]:value,
-        });
-    }
 
-    const onTitleChanged = (e:any) => setFormInfo('title', e.target.value)
-    const onInfoChanged = (e:any) => setFormInfo('info', e.target.value)
-    const onClickSave = () => {
-        dispatch(
-            titleAdded({
-                id: nanoid(),
-                title: form.title,
-                info: form.info
-            })
-        )
+    const onTitleChanged = (e:any) => {
+        dispatch(titleMod(e.target.value))
+    }
+    const onInfoChanged = (e:any) => {
+        dispatch(infoMod(e.target.value))
     }
 
     return (
-        <div className="container" onClick={onClickSave} id="titleBox">
+        <div className="container" id="titleBox">
             <input 
                 type="text"
                 id="formTitle"
                 name="formTitle"
-                value={form.title}
+                value={forminfo.title}
                 placeholder="제목 없는 설문지"
                 onChange={onTitleChanged}
                 disabled={isEdit? false : true}
@@ -55,7 +40,7 @@ const TitleBox = () => {
                 type="text"
                 id="formInfo"
                 name="formInfo"
-                value={form.info}
+                value={forminfo.info}
                 placeholder="설문지 설명"
                 onChange={onInfoChanged}
                 disabled={isEdit? false : true}
