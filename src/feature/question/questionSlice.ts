@@ -1,4 +1,5 @@
 import {createSlice, nanoid} from "@reduxjs/toolkit"
+import { type } from "os";
 
 interface OptionProps {
     id: number;
@@ -21,7 +22,7 @@ const initialState: Question[] = [{
     isnecessary: false,
     ask: '',
     answer: '',
-    options: [{id:0, content:'옵션1'}],
+    options: [{id:1, content:'옵션1'}],
     selected: [],
 }];
 
@@ -37,9 +38,16 @@ export const questionSlice = createSlice ({
             const deletionid: string = action.payload;
             return state.filter(item => item.id !== deletionid)
         },
-        questionAnswered(state, action) {
-            const answeredQuest: Question = action.payload;
-            // state[answeredQuest.index] = answeredQuest;
+        questionCopy(state, action){
+            const copyid: string = action.payload;
+            const original = state.find(item => item.id === copyid)!;
+            // const newQuestion: Question = JSON.parse(JSON.stringify(original));
+            
+            if (typeof original === undefined) return;
+
+            const newQuestion: Question = {...original};
+            newQuestion.id = nanoid();
+            if (typeof newQuestion !== undefined) state.push(newQuestion);
         },
         questionAskMod(state, action){
             const {id, ask} = action.payload;
@@ -52,17 +60,42 @@ export const questionSlice = createSlice ({
             question && (question.type = type);
         },
         questionSelectedMod(state, action){
-            const {id, optionId, isSelected} = action.payload;
+            const {id, optionId, isSelected, isOne} = action.payload;
             const question = state.find(item => item.id === id);
             if (!question) return;
-            question.selected.length > 0 && question.selected.splice(-1, 1); // clear selected
-            if (!isSelected) {
+
+            
+            const idx = question.selected.indexOf(optionId, 0);
+            if (isOne===true) (question.selected.length > 0 && (question.selected = [])); // clear selected
+            if (isOne===false) {
+                if(idx >-1) question.selected.splice(idx, 1);
+            }
+            if (!isSelected && idx === -1) {
               question.selected.push(optionId);
             }
         },
+        questionAnswerMod(state, action){
+            const {id, answer} = action.payload;
+            const question = state.find(item => item.id === id);
+            question && (question.answer = answer);
+        },
+        questionOptionAdd(state, action){
+            const {id, optionId} = action.payload;
+            const question = state.find(item => item.id === id);
+            question && question.options.push({id: optionId, content:'옵션'+ String(optionId)})
+        },
+        questionOptionMod(state, action){
+            const { id, optionId, content } = action.payload;
+            const questionId = state.findIndex((item) => item.id === String(id));
+            const optionIdx = state[questionId].options.findIndex((item) => item.id === Number(optionId));
+            state[questionId].options[optionIdx].content = content;
+            console.log(state[questionId].options[optionIdx].content)
+        }
     }
 })
 
-export const { questionAdd, questionAnswered, questionAskMod, questionDelete, questionTypeMod, questionSelectedMod} = questionSlice.actions;
+export const { questionAdd, questionAskMod, questionCopy, 
+                questionDelete, questionTypeMod, questionSelectedMod, 
+                questionAnswerMod, questionOptionAdd, questionOptionMod} = questionSlice.actions;
 
 export default questionSlice.reducer;

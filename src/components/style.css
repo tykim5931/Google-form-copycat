@@ -3,10 +3,29 @@
     width: 30%;
     height: 35px;
     border-radius: 5px;
-    font-size: 15px;
+    font-size: 12px;
     margin-left: 20px;
     /* position: absolute; */
 }
 .dropdownComp{
+    background-color:antiquewhite;
+    width: 30%;
+    height: 35px;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-left: 20px;
+    /* position: absolute; */
     
+}
+.narrativeAnswer{
+    height: fit-content;
+    padding: 10px;
+    padding-left: 0px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.flexContainer{
+    display: flex;
+    width: 100%;
+    align-items: center;
 }

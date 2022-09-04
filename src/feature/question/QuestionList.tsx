@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 
-import { questionAdd, questionAnswered } from "./questionSlice";
+import { questionAdd } from "./questionSlice";
 import QuestionBox from './QuestionBox';
 import './style.css'
 

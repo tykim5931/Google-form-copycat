@@ -1,5 +1,5 @@
 #ask {
-    font-size: 17px;
+    font-size: 15px;
     width: 60%;
     border-bottom: solid 1px grey;
 }
@@ -37,4 +37,13 @@ input {
 body{
     background-color:wheat;
     align-items: center;
+}
+
+#optionBtn{
+    background-color: antiquewhite;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 30px;
+    font-size: 15px;
+    width: 30%;
 }

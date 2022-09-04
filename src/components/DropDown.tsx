@@ -35,7 +35,7 @@ const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
     }
 
     const onSelectedChanged = (e: any) => {
-        dispatch(questionSelectedMod({id: questionId, optionId: e.target.value, isAnswer}))
+        dispatch(questionSelectedMod({id: questionId, optionId: e.target.value, isAnswer, isOne:true}))
     }
 
     const showValue = () => {
@@ -49,7 +49,6 @@ const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
         <Select 
             onChange={onTypeChanged}
             className='dropdown'
-            disableUnderline
             disabled={false}
             value={showValue()}
             >

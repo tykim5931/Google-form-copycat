@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 
-import { questionAdd, questionAnswered, questionAskMod, questionDelete} from "./questionSlice";
-import { Question } from './questionSlice';
+import { questionAskMod, questionDelete, questionCopy} from "./questionSlice";
+import {Narrative, Optional} from '../../components';
 import Dropdown from "../../components/Dropdown";
 import './style.css'
 
@@ -24,8 +25,13 @@ interface QuestionProps {
 
 const QuestionBox = ({questionId}: QuestionProps) => {
     const dispatch = useDispatch()
-    const questions = useSelector((state:RootState) => state.questions)
 
+    const location = useLocation()
+    const isPreview = location.pathname === '/preview';
+    const isResult = location.pathname === '/result';
+    const isEdit = !isPreview && !isResult;
+
+    const questions = useSelector((state:RootState) => state.questions)
     const question = questions.find((item) => item.id === questionId);
     if (!question) return null;
 
@@ -36,30 +42,54 @@ const QuestionBox = ({questionId}: QuestionProps) => {
     const onDeleteQuestion = () => {
         dispatch(questionDelete(question.id))
     }
+    const onCopyQuestion = () => {
+        dispatch(questionCopy(question.id))
+    }
 
-    const onTypeChanged = (type: string): void => {
-        // setSelectOption(type);
-        // dispatch typechanged
+    const questionOptions = question.options;
+    const selectedOptions = question.selected;
+    const optionComp = (type: number) => {
+        let optionList = questionOptions?.map( option => (
+            <Optional 
+                key={option.id}
+                questionId={questionId}
+                optionId={option.id}
+                optionContent={option.content}
+                type={type}
+                isLast={false}
+                isAnswer={selectedOptions.find(item => item === option.id) !==undefined}
+                />
+        ))
+        if(isEdit){
+            optionList = optionList.concat(
+                <Optional
+                  key={questionOptions.length + 1}
+                  questionId={questionId}
+                  optionId={questionOptions.length + 1}
+                  optionContent="옵션 추가"
+                  type={type}
+                  isLast={true}
+                  isAnswer={false}
+                />,
+            );
+        }
+        return optionList;
     };
 
-
-    // // drop down - nav
-    // const [showDropDown, setShowDropDown] = useState(false);
-    // const [selectOption, setSelectOption] = useState("");
-
-    // const questionOptions = () => {
-    //     return ["단답형", "장문형", "객관식 질문", "체크박스", "드롭다운"];
-    // };
-
-    // const toggleDropDown = () => {
-    //     setShowDropDown(!showDropDown);
-    // };
-
-    // const dismissHandler = (event: React.FocusEvent<HTMLButtonElement>): void => {
-    //     if (event.currentTarget === event.target) {
-    //     setShowDropDown(false);
-    //     }
-    // };
+    const inputComp = () => {
+        switch (question.type){
+            case 0: // 단답형
+                return <Narrative type={0} questionId={questionId} />
+            case 1: // 장문형
+                return <Narrative type={1} questionId={questionId} />
+            case 2: // 객관식
+            case 3: // 체크박스
+            case 4: // 드롭다운
+                return optionComp(question.type)
+            default:
+                return;
+        }
+    }
 
     return (
         <div className="container" id="questionBox" key={question.id}>
@@ -71,16 +101,26 @@ const QuestionBox = ({questionId}: QuestionProps) => {
                     value={question.ask}
                     placeholder="질문"
                     onChange={onAskChanged}
+                    disabled={isPreview || isResult ? true : false}
                 />
-                <Dropdown questionId={questionId} options={options} />
+                {isEdit && <Dropdown questionId={questionId} options={options} />}
             </div>
-
+            {inputComp()}
             <br></br>
-            <button 
-                id="deleteBtn"
-                onClick={onDeleteQuestion}>
-                <img src={require("../../assets/delete_icon.png")} />
-            </button>
+            {isEdit && 
+            <div className='btnBarContainer'>
+                <button 
+                    id="deleteBtn"
+                    onClick={onDeleteQuestion}>
+                    <img src={require("../../assets/delete_icon.png")} />
+                </button>
+                <button 
+                    id="copyBtn"
+                    onClick={onCopyQuestion}>
+                    <img src={require("../../assets/copy_icon.png")} />
+                </button>
+            </div>
+            }
 
         </div>
     )
