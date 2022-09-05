@@ -16,7 +16,7 @@ export interface Question {
 }
 
 const initialState: {isComplete:boolean, questionList:Question[]} = {
-    isComplete: false,
+    isComplete: true,
     questionList: [{
         id: nanoid(),
         type: 0,
@@ -45,18 +45,29 @@ export const questionSlice = createSlice ({
             })
         },
         questionAdd(state, action) {    // new!
-            const newQuestion = action.payload;
+            const newQuestion = action.payload as Question;
+            if(newQuestion.isnecessary === true) {state.isComplete = false}
             state.questionList.push(newQuestion);
         },
         questionDelete(state, action){
             const deletionid: string = action.payload;
+            let necessaryCount = 0;
+            state.questionList.forEach((question, idx) => {
+                if (question.isnecessary) {
+                  if ((question.type > 1 && question.selected.length === 0) || 
+                      (question.type <= 1 && question.answer==="")){
+                        necessaryCount ++;
+                  }
+                }
+            })
+            if(necessaryCount !== 0) state.isComplete = false;
+            else state.isComplete = true;
+
             return {isComplete: state.isComplete, questionList: state.questionList.filter(item => item.id !== deletionid)}
         },
         questionCopy(state, action){
             const copyid: string = action.payload;
             const original = state.questionList.find(item => item.id === copyid)!;
-            // const newQuestion: Question = JSON.parse(JSON.stringify(original));
-            
             if (typeof original === undefined) return;
 
             const newQuestion: Question = {...original};
@@ -95,7 +106,6 @@ export const questionSlice = createSlice ({
                     if ((question.type > 1 && question.selected.length === 0) || 
                         (question.type <= 1 && question.answer==="")){
                             state.isComplete=false;
-                            console.log(state.isComplete)
                             return;
                     }
                     }
@@ -114,7 +124,6 @@ export const questionSlice = createSlice ({
                     if ((question.type > 1 && question.selected.length === 0) || 
                         (question.type <= 1 && question.answer==="")){
                             state.isComplete=false;
-                            console.log(state.isComplete)
                             return;
                     }
                     }
@@ -143,13 +152,36 @@ export const questionSlice = createSlice ({
             const id = action.payload;
             const questionId = state.questionList.findIndex((item) => item.id === String(id));
             state.questionList[questionId].isnecessary = !state.questionList[questionId].isnecessary; // switch necessary
+            // check isComplete
+            let necessaryCount = 0;
+            state.questionList.forEach((question, idx) => {
+                if (question.isnecessary) {
+                  if ((question.type > 1 && question.selected.length === 0) || 
+                      (question.type <= 1 && question.answer==="")){
+                        necessaryCount ++;
+                  }
+                }
+            })
+            if(necessaryCount !== 0) state.isComplete = false;
+            else state.isComplete = true;
         },
         questionAnswerInit(state, action){
             state.questionList.map(item => {
                 item.answer = '';
                 item.selected = [];
             })
-            console.log(state);
+            // check isComplete
+            let necessaryCount = 0;
+            state.questionList.forEach((question, idx) => {
+                if (question.isnecessary) {
+                  if ((question.type > 1 && question.selected.length === 0) || 
+                      (question.type <= 1 && question.answer==="")){
+                        necessaryCount ++;
+                  }
+                }
+            })
+            if(necessaryCount !== 0) state.isComplete = false;
+            else state.isComplete = true;
         },
         questionReorder: (state, action) => {
             const { firstIdx, secondIdx } = action.payload;

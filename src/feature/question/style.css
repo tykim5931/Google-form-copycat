@@ -17,9 +17,16 @@
 }
 .btnBarContainer{
     display: flex;
-    width: fit-content;
+    width: 30%;
     align-items: center;
+    justify-content: space-evenly;
+    margin-left: 400px
 }
 .answerBox{
     padding-top: 20px;
+}
+.handler{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

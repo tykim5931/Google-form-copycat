@@ -1,6 +1,6 @@
 .dropdown{
     background-color:antiquewhite;
-    width: 30%;
+    width: 28%;
     height: 35px;
     border-radius: 5px;
     font-size: 12px;
@@ -9,13 +9,10 @@
 }
 .dropdownComp{
     background-color:antiquewhite;
-    width: 30%;
     height: 35px;
     border-radius: 5px;
     font-size: 12px;
     margin-left: 20px;
-    /* position: absolute; */
-    
 }
 .narrativeAnswer{
     height: fit-content;

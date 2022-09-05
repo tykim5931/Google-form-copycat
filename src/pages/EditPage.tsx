@@ -14,9 +14,8 @@ const EditPage = () => {
   return (
       <div className="formCanvas">
         <TitleBox></TitleBox>
-        <SideBar></SideBar>
         <QuestionList></QuestionList>
-        <button onClick={onInitializeForm}>양식 지우기</button>
+        <SideBar></SideBar>
       </div>
   );
 };
