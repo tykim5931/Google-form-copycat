@@ -6,7 +6,7 @@ import TitleBox from "../feature/title/TitleBox";
 import "../index.css"
 
 const ResultPage = () => {
-  const questions = useSelector((state:RootState) => state.questions)
+  const questions = useSelector((state:RootState) => state.questions.questionList)
   const renderedQuestions = questions.map((question) => summarize(question))
 
   return (

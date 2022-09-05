@@ -29,7 +29,7 @@ const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
     const isResult = location.pathname === '/result';
     const isEdit = !isPreview && !isResult;
 
-    const questions = useSelector((state:RootState) => state.questions)
+    const questions = useSelector((state:RootState) => state.questions.questionList)
     const question = questions.find((item) => item.id === questionId);
     if (!question) return null;
 

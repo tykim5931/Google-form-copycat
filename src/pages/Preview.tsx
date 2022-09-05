@@ -5,30 +5,26 @@ import QuestionList from "../feature/question/QuestionList";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { questionAnswerInit } from "../feature/question/questionSlice";
+import { questionAnswerInit, questionCompleteCheck} from "../feature/question/questionSlice";
 import { useCallback } from "react";
 
 const Preview = () => {
     const dispatch = useDispatch()
-    const questions = useSelector((state:RootState) => state.questions)
+    const isComplete = useSelector((state:RootState) => state.questions.isComplete)
 
     const initializeAns = () => {
       dispatch(questionAnswerInit({}))
     }
     
     const navigate = useNavigate();
-    const handleComplete = useCallback(() => {
-      questions.forEach((question, idx) => {
-        if (question.isnecessary) {
-          if ((question.type > 1 && question.selected.length === 0) || 
-              (question.type <= 1 && question.answer==="")){
-                console.log("necessary is not filled")
-                return;
-          }
-        }
-      })
-      navigate('/result', {replace: true})
-    }, [navigate]);
+    const handleComplete = () => {
+      dispatch(questionCompleteCheck())
+      console.log(isComplete)
+      if(isComplete) navigate('/result')
+      else {
+        console.log("필수항목 채우세요")
+      }
+    };
 
     return (
       <div className="formCanvas">
@@ -43,8 +39,5 @@ const Preview = () => {
     );
   };
 
-const ConditionalLink = ({condition}:{condition:boolean}) => (condition)
-  ? <Link to="/result">제출</Link>
-  : <>제출</>
-
+  
 export default Preview;

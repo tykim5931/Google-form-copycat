@@ -25,8 +25,8 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
     const isResult = location.pathname === '/result';
     const isEdit = !isPreview && !isResult;
 
-    const questions = useSelector((state:RootState) => state.questions)
-    const question = questions.find((item) => item.id === questionId);
+    const questions = useSelector((state:RootState) => state.questions.questionList)
+    const question = questions.find(item => item.id === questionId);
     if (!question) return null;
 
     const onOptionAdd = () => {

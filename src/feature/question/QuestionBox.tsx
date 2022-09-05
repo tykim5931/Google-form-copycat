@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { Switch } from '@mui/material';
@@ -34,7 +33,7 @@ const QuestionBox = ({questionId, provided}: QuestionProps) => {
     const isResult = location.pathname === '/result';
     const isEdit = !isPreview && !isResult;
 
-    const questions = useSelector((state:RootState) => state.questions)
+    const questions = useSelector((state:RootState) => state.questions.questionList)
     const question = questions.find((item) => item.id === questionId);
     if (!question) return null;
 

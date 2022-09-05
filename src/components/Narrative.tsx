@@ -15,7 +15,7 @@ const Narrative = ({ type, questionId }: QuestionProps) => {
     const dispatch = useDispatch()
     const location = useLocation()
 
-    const questions = useSelector((state:RootState) => state.questions)
+    const questions = useSelector((state:RootState) => state.questions.questionList)
     const question = questions.find((item) => item.id === questionId);
     if (!question) return null;
 

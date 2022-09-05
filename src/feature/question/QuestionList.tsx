@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 
 import { questionReorder } from "./questionSlice";
@@ -11,7 +9,7 @@ import './style.css'
 const QuestionList = () => {
     const dispatch = useDispatch()
 
-    const questions = useSelector((state:RootState) => state.questions)
+    const questions = useSelector((state:RootState) => state.questions.questionList)
     const renderedQuestions = questions.map((question, idx) => (
         <Draggable key={question.id} draggableId={question.id} index={idx}>
             {(provided, snapshot) => (
