@@ -120,7 +120,7 @@ const QuestionBox = ({questionId, provided}: QuestionProps) => {
     return (
         <div className="container" id="questionBox" key={question.id}>
             <div className='handler' {...provided.dragHandleProps}>
-                <img src={require("../../assets/drag_icon.png")} alt="" />
+                {isEdit && <img src={require("../../assets/drag_icon.png")} alt="" />}
             </div>
             <div className="flexContainer">
                 {(isPreview && question.isnecessary) && <p style={redfontStyle}>*</p>}
