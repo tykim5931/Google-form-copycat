@@ -9,7 +9,7 @@ or
 unzip the zip file
 ```
 ```
-cd minesweeper
+cd Google-form-copycat-master
 npm install
 npm start
 ```
