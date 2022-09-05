@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 
-import { questionAdd } from "./questionSlice";
+import { questionReorder } from "./questionSlice";
 import QuestionBox from './QuestionBox';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import './style.css'
 
 const QuestionList = () => {
@@ -12,15 +13,35 @@ const QuestionList = () => {
 
     const questions = useSelector((state:RootState) => state.questions)
     const renderedQuestions = questions.map((question, idx) => (
-        <article key={question.id}>
-            <QuestionBox key={question.id} questionId={question.id} />
-        </article>
+        <Draggable key={question.id} draggableId={question.id} index={idx}>
+            {(provided, snapshot) => (
+            <div ref={provided.innerRef} {...provided.draggableProps}>
+                <QuestionBox key={question.id} questionId={question.id} provided={provided} />
+            </div>
+            )}
+        </Draggable>
     ))
+    const onDragEnd = (result: DropResult) => {
+        if (!result.destination) {
+          return;
+        }
+        dispatch(questionReorder({ firstIdx: result.source.index, secondIdx: result.destination.index }));
+    };
 
     return (
-        <section>
-            {renderedQuestions}
-        </section>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided) => (
+              <div ref={provided.innerRef}>
+                {renderedQuestions}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        // <section>
+        //     {renderedQuestions}
+        // </section>
     );
 }
 

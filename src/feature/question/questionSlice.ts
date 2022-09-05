@@ -29,6 +29,18 @@ export const questionSlice = createSlice ({
     name: 'questions',
     initialState,
     reducers:{
+        questionInit(state, action) {
+            while(state.length >0) state.pop();
+            state.push({
+                id: nanoid(),
+                type: 0,
+                isnecessary: false,
+                ask: '',
+                answer: '',
+                options: [{id:1, content:'옵션1'}],
+                selected: [],
+            })
+        },
         questionAdd(state, action) {    // new!
             const newQuestion = action.payload;
             state.push(newQuestion);
@@ -107,14 +119,20 @@ export const questionSlice = createSlice ({
                 item.selected = [];
             })
             console.log(state);
-        }
+        },
+        questionReorder: (state, action) => {
+            const { firstIdx, secondIdx } = action.payload;
+            const [removed] = state.splice(firstIdx, 1);
+            state.splice(secondIdx, 0, removed);
+        },
     }
 })
 
 export const { questionAdd, questionAskMod, questionCopy, 
                 questionDelete, questionTypeMod, questionSelectedMod, 
                 questionAnswerMod, questionOptionAdd, questionOptionMod,
-                questionOptionDelete, questionNecessary, questionAnswerInit
+                questionOptionDelete, questionNecessary, questionAnswerInit,
+                questionInit, questionReorder
             } = questionSlice.actions;
 
 export default questionSlice.reducer;

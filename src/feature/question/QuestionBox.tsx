@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { Switch } from '@mui/material';
 import { RootState } from '../../app/store';
+import { DraggableProvided } from 'react-beautiful-dnd';
 
 import { questionAskMod, questionDelete, questionCopy, questionNecessary} from "./questionSlice";
 import {Narrative, Optional} from '../../components';
@@ -22,9 +23,10 @@ const options = [
 
 interface QuestionProps {
     questionId: string;
+    provided: DraggableProvided;
 }
 
-const QuestionBox = ({questionId}: QuestionProps) => {
+const QuestionBox = ({questionId, provided}: QuestionProps) => {
     const dispatch = useDispatch()
 
     const location = useLocation()
@@ -117,6 +119,9 @@ const QuestionBox = ({questionId}: QuestionProps) => {
 
     return (
         <div className="container" id="questionBox" key={question.id}>
+            <div className='handler' {...provided.dragHandleProps}>
+                <img src={require("../../assets/drag_icon.png")} alt="" />
+            </div>
             <div className="flexContainer">
                 {(isPreview && question.isnecessary) && <p style={redfontStyle}>*</p>}
                 <input 
