@@ -6,37 +6,36 @@ import { Radio, Checkbox } from '@mui/material';
 import { questionOptionAdd, questionOptionMod, questionSelectedMod, questionOptionDelete} from "../feature/question/questionSlice";
 import "./style.css"
 import React from 'react';
+import { Question } from '../feature/interfaces';
 
 
-interface QuestionProps {
-  type: number;    // 0 = 단답형, 1 = 장문형
-  questionId: string;
-  optionId: number;
-  optionContent: string;
-  isLast: boolean;
-  isAnswer?: boolean;
-}
-
-const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer }: QuestionProps) => {
+const Optional = ({ type, id, thisOption ,isAnswer }: 
+                    Pick<Question,'type'|'id'|'thisOption' |'isAnswer'>) => {
     const dispatch = useDispatch()
 
+    // define this page (편집, 미리보기, 결과)
     const location = useLocation()
     const isPreview = location.pathname === '/preview';
     const isResult = location.pathname === '/result';
     const isEdit = !isPreview && !isResult;
 
+    // find question from question state
     const questions = useSelector((state:RootState) => state.questions.questionList)
-    const question = questions.find(item => item.id === questionId);
+    const question = questions.find(item => item.id === id);
     if (!question) return null;
 
+    // unpack this option info
+    if (!thisOption) return null;
+    const {optionId, optionContent, isLast} = thisOption;
+
     const onOptionAdd = () => {
-        isLast && dispatch(questionOptionAdd({ id: questionId, optionId }));
+        isLast && dispatch(questionOptionAdd({ id: id, optionId }));
     };
     const onOptionMod = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(questionOptionMod({ id: questionId, optionId, content: e.target.value }));
+        dispatch(questionOptionMod({ id: id, optionId, content: e.target.value }));
     };
     const onOptionDelete = () => {
-        dispatch(questionOptionDelete({ id: questionId, optionId }));
+        dispatch(questionOptionDelete({ id: id, optionId }));
     };
 
     const showOptionButton = () => {
@@ -45,7 +44,7 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
                 return (
                     <Radio 
                      disabled={isPreview? false : true}
-                     onClick={() => dispatch(questionSelectedMod({id: questionId, optionId, isAnswer, isOne: true}))}
+                     onClick={() => dispatch(questionSelectedMod({id: id, optionId, isAnswer, isOne: true}))}
                      value={String(optionId)}
                      checked={isEdit? false : isAnswer}
                     />
@@ -54,7 +53,7 @@ const Optional = ({ type, questionId, optionId, optionContent, isLast ,isAnswer 
                 return (
                     <Checkbox 
                         disabled={isPreview? false : true}
-                        onClick={() => dispatch(questionSelectedMod({id: questionId, optionId, isAnswer, isOne: false}))}
+                        onClick={() => dispatch(questionSelectedMod({id: id, optionId, isAnswer, isOne: false}))}
                         value={String(optionId)}
                         checked={isEdit? false : isAnswer}
                     />

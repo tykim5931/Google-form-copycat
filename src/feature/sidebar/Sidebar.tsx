@@ -1,17 +1,10 @@
 import { nanoid } from '@reduxjs/toolkit';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {BrowserRouter as Router, Link, useLocation, useNavigate} from 'react-router-dom';
+import { BrowserRouter as Router, Link, useLocation, useNavigate } from 'react-router-dom';
 import { RootState } from '../../app/store';
 import { questionAdd, questionAnswerInit, questionCompleteCheck, questionInit } from '../question/questionSlice';
 import '../../index.css'
 import './style.css'
-
-
-interface OptionProps {
-  id: number;
-  content : string;
-}
 
 
 const SideBar = () => {
@@ -20,8 +13,6 @@ const SideBar = () => {
   
   const location = useLocation()
   const isPreview = location.pathname === '/preview';
-  const isResult = location.pathname === '/result';
-  const isEdit = !isPreview && !isResult;
   
   const onNewQuestionClicked = () => {
     const newQuestion = {

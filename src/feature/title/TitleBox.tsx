@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 
 import { titleMod, infoMod } from "./titleSlice";
@@ -18,10 +16,10 @@ const TitleBox = () => {
     
     const forminfo = useSelector((state:RootState) => state.title)
 
-    const onTitleChanged = (e:any) => {
+    const onTitleChanged = (e:React.ChangeEvent<HTMLInputElement>) => {
         dispatch(titleMod(e.target.value))
     }
-    const onInfoChanged = (e:any) => {
+    const onInfoChanged = (e:React.ChangeEvent<HTMLInputElement>) => {
         dispatch(infoMod(e.target.value))
     }
 

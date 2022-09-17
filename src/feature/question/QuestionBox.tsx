@@ -9,15 +9,7 @@ import {Narrative, Optional} from '../../components';
 import Dropdown from "../../components/Dropdown";
 import'../../index.css';
 import './style.css';
-
-
-const options = [
-    { id: 0, content: '단답형' },
-    { id: 1, content: '장문형' },
-    { id: 2, content: '객관식 질문'},
-    { id: 3, content: '체크박스'},
-    { id: 4, content: '드롭다운'},
-  ];
+import { QUESTIONTYPES } from '../interfaces';
 
 
 interface QuestionProps {
@@ -37,7 +29,7 @@ const QuestionBox = ({questionId, provided}: QuestionProps) => {
     const question = questions.find((item) => item.id === questionId);
     if (!question) return null;
 
-    const onAskChanged = (e:any) => {
+    const onAskChanged = (e : React.ChangeEvent<HTMLInputElement>) => {
         dispatch(questionAskMod({ id: question.id, ask: e.target.value }))
     }
     const onDeleteQuestion = () => {
@@ -61,11 +53,11 @@ const QuestionBox = ({questionId, provided}: QuestionProps) => {
         return optionContent.content;
     }
 
-    const optionComp = (type: number) => {
+    const optionComp = (type: 0|1|2|3|4) => {
         if (type == 4) { // dropdown
             if (isPreview) return (
                 <div className="answerBox">
-                    <Dropdown questionId={questionId} options={question.options} />
+                    <Dropdown id={questionId} options={question.options} />
                 </div>
             )
             else if (isResult) return <div>{getSelectedItem()}</div>
@@ -73,24 +65,28 @@ const QuestionBox = ({questionId, provided}: QuestionProps) => {
         let optionList = questionOptions?.map( option => (
             <Optional 
                 key={option.id}
-                questionId={questionId}
-                optionId={option.id}
-                optionContent={option.content}
+                id={questionId}
                 type={type}
-                isLast={false}
+                thisOption={{
+                    optionId:option.id, 
+                    optionContent: option.content,
+                    isLast: false,
+                }}
                 isAnswer={selectedOptions.find(item => item === option.id) !==undefined}
-                />
+            />
         ))
         if(isEdit){
             optionList = optionList.concat(
                 <Optional
-                  key={questionOptions.length + 1}
-                  questionId={questionId}
-                  optionId={questionOptions.length + 1}
-                  optionContent="옵션 추가"
-                  type={type}
-                  isLast={true}
-                  isAnswer={false}
+                    key={questionOptions.length + 1}
+                    id={questionId}
+                    type={type}
+                    thisOption={{
+                        optionId:questionOptions.length + 1, 
+                        optionContent:"옵션 추가",
+                        isLast: true,
+                    }}
+                    isAnswer={false}
                 />,
             );
         }
@@ -100,9 +96,9 @@ const QuestionBox = ({questionId, provided}: QuestionProps) => {
     const inputComp = () => {
         switch (question.type){
             case 0: // 단답형
-                return <Narrative type={0} questionId={questionId} />
+                return <Narrative type={0} id={questionId} />
             case 1: // 장문형
-                return <Narrative type={1} questionId={questionId} />
+                return <Narrative type={1} id={questionId} />
             case 2: // 객관식
             case 3: // 체크박스
             case 4: // 드롭다운
@@ -132,7 +128,7 @@ const QuestionBox = ({questionId, provided}: QuestionProps) => {
                     onChange={onAskChanged}
                     disabled={isPreview || isResult ? true : false}
                 />
-                {isEdit && <Dropdown questionId={questionId} options={options} />}
+                {isEdit && <Dropdown id={questionId} options={QUESTIONTYPES} />}
             </div>
             {inputComp()}
             <br></br>

@@ -1,29 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { RootState } from '../app/store';
+import { Question } from '../feature/interfaces';
 
 import { questionAnswerMod} from "../feature/question/questionSlice";
 import "./style.css"
 
 
-interface QuestionProps {
-  type: 0 | 1;    // 0 = 단답형, 1 = 장문형
-  questionId: string;
-}
-
-const Narrative = ({ type, questionId }: QuestionProps) => {
+const Narrative = ({ id, type }: Pick<Question, 'id' | 'type'>) => {
     const dispatch = useDispatch()
     const location = useLocation()
 
     const questions = useSelector((state:RootState) => state.questions.questionList)
-    const question = questions.find((item) => item.id === questionId);
+    const question = questions.find((item) => item.id === id);
     if (!question) return null;
 
     const isPreview = location.pathname === '/preview';
     const isResult = location.pathname === '/result';
 
     const onAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(questionAnswerMod({ id: questionId, answer: e.target.value }));
+        dispatch(questionAnswerMod({ id: id, answer: e.target.value }));
     };
 
     return (

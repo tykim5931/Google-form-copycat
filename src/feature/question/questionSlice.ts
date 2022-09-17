@@ -1,19 +1,6 @@
 import {createSlice, nanoid} from "@reduxjs/toolkit"
+import { Question } from "../interfaces";
 
-interface OptionProps {
-    id: number;
-    content : string;
-}
-
-export interface Question {
-    id: string,
-    type: number,
-    isnecessary: boolean;
-    ask: string;
-    answer: string;     // for subjective questions
-    options: OptionProps[];  // for objective questions
-    selected: number[];
-}
 
 const initialState: {isComplete:boolean, questionList:Question[]} = {
     isComplete: true,

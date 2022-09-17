@@ -37,9 +37,6 @@ const QuestionList = () => {
             )}
           </Droppable>
         </DragDropContext>
-        // <section>
-        //     {renderedQuestions}
-        // </section>
     );
 }
 

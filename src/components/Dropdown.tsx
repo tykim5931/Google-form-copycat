@@ -1,26 +1,15 @@
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@mui/material';
-
-import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { questionSelectedMod, questionTypeMod } from '../feature/question/questionSlice';
 import "./style.css";
 import { useLocation } from 'react-router-dom';
+import { Question } from '../feature/interfaces';
 
-interface OptionProps {
-    id: number;
-    content : string;
-}
 
-interface DropDownProps {
-    questionId : string;
-    options: OptionProps[];
-    isAnswer?: boolean;
-};
-
-const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
+const Dropdown = ({ id, options, isAnswer}: Pick<Question, 'id' | 'options' |'isAnswer'>) => {
     const dispatch = useDispatch();
     const theme = unstable_createMuiStrictModeTheme();
     
@@ -30,24 +19,22 @@ const Dropdown = ({ questionId, options, isAnswer}: DropDownProps) => {
     const isEdit = !isPreview && !isResult;
 
     const questions = useSelector((state:RootState) => state.questions.questionList)
-    const question = questions.find((item) => item.id === questionId);
+    const question = questions.find((item) => item.id === id);
     if (!question) return null;
 
     const {type: questionType, selected} = question;
-    const selectedAns = selected.length > 0 ? selected[0] : '';
 
-    const onTypeChanged = (e: any) => {
-        dispatch(questionTypeMod({id: questionId, type: e.target.value}))
+    const onTypeChanged = (e: SelectChangeEvent<number>) => {
+        dispatch(questionTypeMod({id: id, type: e.target.value}))
     }
 
-    const onSelectedChanged = (e: any) => {
-        dispatch(questionSelectedMod({id: questionId, optionId: e.target.value, isAnswer, isOne:true}))
+    const onSelectedChanged = (e: SelectChangeEvent<number>) => {
+        dispatch(questionSelectedMod({id: id, optionId: e.target.value, isAnswer, isOne:true}))
     }
 
     const showValue = () => {
         if (!isEdit) {
             const selectedOption = question.options.find(item => item.id == question.selected[0]);
-            // if (selectedOption === undefined) return;
             const selectedContent = selectedOption? selectedOption.id : 1;
             return selectedContent;
         }

@@ -1,9 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit"
-
-interface FormInfo {
-    title: string;
-    info: string;
-}
+import { FormInfo } from "../interfaces"
 
 const initialState: FormInfo = {
     title: '제목 없는 설문지',
@@ -15,11 +11,11 @@ export const titleSlice = createSlice ({
     initialState,
     reducers:{
         titleMod(state, action) {
-            const title = action.payload;
+            const title : string = action.payload;
             state.title = title;
         },
         infoMod(state, action) {
-            const info = action.payload;
+            const info : string = action.payload;
             state.info = info;
         }
     }
