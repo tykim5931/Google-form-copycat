@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit"
-import { FormInfo } from "../interfaces"
+import { FormInfo } from "../featureTypes"
 
 const initialState: FormInfo = {
     title: '제목 없는 설문지',
@@ -22,5 +22,4 @@ export const titleSlice = createSlice ({
 })
 
 export const { titleMod, infoMod } = titleSlice.actions;
-
 export default titleSlice.reducer;

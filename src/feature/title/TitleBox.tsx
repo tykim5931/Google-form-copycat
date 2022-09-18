@@ -9,13 +9,16 @@ import { useLocation } from 'react-router-dom';
 const TitleBox = () => {
     const dispatch = useDispatch()
 
+    // =========== Find HREF Location =================
     const location = useLocation()
     const isPreview = location.pathname === '/preview';
     const isResult = location.pathname === '/result';
     const isEdit = !isPreview && !isResult;
-    
+
+    // ============== Render QuestionBox ===============
     const forminfo = useSelector((state:RootState) => state.title)
 
+    // =========== EventHandler ========================
     const onTitleChanged = (e:React.ChangeEvent<HTMLInputElement>) => {
         dispatch(titleMod(e.target.value))
     }

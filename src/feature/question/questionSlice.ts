@@ -1,6 +1,5 @@
 import {createSlice, nanoid} from "@reduxjs/toolkit"
-import { Question } from "../interfaces";
-
+import { Question } from "../featureTypes";
 
 const initialState: {isComplete:boolean, questionList:Question[]} = {
     isComplete: true,
@@ -31,25 +30,14 @@ export const questionSlice = createSlice ({
                 selected: [],
             })
         },
-        questionAdd(state, action) {    // new!
+        questionAdd(state, action) {
             const newQuestion = action.payload as Question;
             if(newQuestion.isnecessary === true) {state.isComplete = false}
             state.questionList.push(newQuestion);
         },
         questionDelete(state, action){
             const deletionid: string = action.payload;
-            let necessaryCount = 0;
-            state.questionList.forEach((question, idx) => {
-                if (question.isnecessary) {
-                  if ((question.type > 1 && question.selected.length === 0) || 
-                      (question.type <= 1 && question.answer==="")){
-                        necessaryCount ++;
-                  }
-                }
-            })
-            if(necessaryCount !== 0) state.isComplete = false;
-            else state.isComplete = true;
-
+            state.isComplete=isFormFilled(state.questionList);
             return {isComplete: state.isComplete, questionList: state.questionList.filter(item => item.id !== deletionid)}
         },
         questionCopy(state, action){
@@ -61,114 +49,66 @@ export const questionSlice = createSlice ({
             newQuestion.id = nanoid();
             if (typeof newQuestion !== undefined) state.questionList.push(newQuestion);
         },
-        questionAskMod(state, action){
+        questionAskMod(state, action){  // 항목 질문 변경
             const {id, ask} = action.payload;
             const question = state.questionList.find(item => item.id === id);
             question && (question.ask = ask);
         },
-        questionTypeMod(state, action){
+        questionTypeMod(state, action){ // 항목 타입 변경
             const {id, type} = action.payload;
             const question = state.questionList.find(item => item.id === id);
             question && (question.type = type);
         },
-        questionSelectedMod(state, action){
+        questionSelectedMod(state, action){ // Optional 항목의 경우, 선택지 변경
             const {id, optionId, isSelected, isOne} = action.payload;
             const question = state.questionList.find(item => item.id === id);
-            if (!question) return;
+            if (!question) return;  // nullcheck
 
             const idx = question.selected.indexOf(optionId, 0);
             if (isOne===true) (question.selected.length > 0 && (question.selected = [])); // clear selected
-            if (isOne===false) {
-                if(idx >-1) question.selected.splice(idx, 1);
-            }
-            if (!isSelected && idx === -1) {
-              question.selected.push(optionId);
-            }
+            if (isOne===false && idx > -1) question.selected.splice(idx, 1);
+            if (!isSelected && idx === -1) question.selected.push(optionId);
 
-            if(question?.isnecessary && question.selected.length===0) state.isComplete = false;
-            else if(question?.isnecessary){
-                state.isComplete=true;
-                state.questionList.forEach((question, idx) => {
-                    if (question.isnecessary) {
-                    if ((question.type > 1 && question.selected.length === 0) || 
-                        (question.type <= 1 && question.answer==="")){
-                            state.isComplete=false;
-                            return;
-                    }
-                    }
-                })
-            }
+            if(question?.isnecessary) 
+                state.isComplete=isFormFilled(state.questionList);
         },
-        questionAnswerMod(state, action){
+        questionAnswerMod(state, action){   // Narrative 항목일 경우, 답변 변경
             const {id, answer} = action.payload;
             const question = state.questionList.find(item => item.id === id);
             question && (question.answer = answer);
-            if(question?.isnecessary && answer==="") state.isComplete = false;
-            else if(question?.isnecessary){
-                state.isComplete=true;
-                state.questionList.forEach((question, idx) => {
-                    if (question.isnecessary) {
-                    if ((question.type > 1 && question.selected.length === 0) || 
-                        (question.type <= 1 && question.answer==="")){
-                            state.isComplete=false;
-                            return;
-                    }
-                    }
-                })
-            }
+            if(question?.isnecessary) 
+                state.isComplete=isFormFilled(state.questionList);
         },
-        questionOptionAdd(state, action){
+        questionOptionAdd(state, action){   // Optional 항목일 경우, 자식 옵션 추가.
             const {id, optionId} = action.payload;
             const question = state.questionList.find(item => item.id === id);
             question && question.options.push({id: optionId, content:'옵션'+ String(optionId)})
         },
-        questionOptionMod(state, action){
+        questionOptionMod(state, action){   // Optional 항목일 경우, 자식옵션의 내용 변경
             const { id, optionId, content } = action.payload;
             const questionId = state.questionList.findIndex((item) => item.id === String(id));
             const optionIdx = state.questionList[questionId].options.findIndex((item) => item.id === Number(optionId));
             state.questionList[questionId].options[optionIdx].content = content;
         },
-        questionOptionDelete(state, action){
+        questionOptionDelete(state, action){    // Optional 항목일 경우, 자식옵션 삭제
             const { id, optionId } = action.payload;
             const questionId = state.questionList.findIndex((item) => item.id === String(id));
             const optionIdx = state.questionList[questionId].options.findIndex((item) => item.id === Number(optionId));
             if(optionIdx > -1) state.questionList[questionId].options.splice(optionIdx, 1);
             state.questionList[questionId].options.map((item, i) => item.id = i+1)
         },
-        questionNecessary(state, action){
+        questionNecessary(state, action){  
             const id = action.payload;
             const questionId = state.questionList.findIndex((item) => item.id === String(id));
             state.questionList[questionId].isnecessary = !state.questionList[questionId].isnecessary; // switch necessary
-            // check isComplete
-            let necessaryCount = 0;
-            state.questionList.forEach((question, idx) => {
-                if (question.isnecessary) {
-                  if ((question.type > 1 && question.selected.length === 0) || 
-                      (question.type <= 1 && question.answer==="")){
-                        necessaryCount ++;
-                  }
-                }
-            })
-            if(necessaryCount !== 0) state.isComplete = false;
-            else state.isComplete = true;
+            state.isComplete = isFormFilled(state.questionList);    // check isComplete
         },
         questionAnswerInit(state, action){
             state.questionList.map(item => {
                 item.answer = '';
                 item.selected = [];
             })
-            // check isComplete
-            let necessaryCount = 0;
-            state.questionList.forEach((question, idx) => {
-                if (question.isnecessary) {
-                  if ((question.type > 1 && question.selected.length === 0) || 
-                      (question.type <= 1 && question.answer==="")){
-                        necessaryCount ++;
-                  }
-                }
-            })
-            if(necessaryCount !== 0) state.isComplete = false;
-            else state.isComplete = true;
+            state.isComplete = isFormFilled(state.questionList);    // check isComplete
         },
         questionReorder: (state, action) => {
             const { firstIdx, secondIdx } = action.payload;
@@ -176,20 +116,26 @@ export const questionSlice = createSlice ({
             state.questionList.splice(secondIdx, 0, removed);
         },
         questionCompleteCheck: (state) =>{
-            state.isComplete=true;
-            state.questionList.forEach((question, idx) => {
-                if (question.isnecessary) {
-                  if ((question.type > 1 && question.selected.length === 0) || 
-                      (question.type <= 1 && question.answer==="")){
-                        state.isComplete=false;
-                        console.log(state.isComplete)
-                        return;
-                  }
-                }
-            })
+            state.isComplete=isFormFilled(state.questionList);
         }
     }
 })
+
+const isFormFilled = (questionList : Question[]) => {
+    const necessaryList = questionList.filter(question => question.isnecessary)
+    const unfilledList = necessaryList.filter(question => {
+        // 비어있는 경우로 filter
+        switch(question.type){
+            case 0: case 1:
+                return question.answer==="";
+            case 2: case 3: case 4:
+                return question.selected.length === 0;
+            default:
+                return true;
+        }
+    })
+    return unfilledList.length === 0;
+}
 
 export const { questionAdd, questionAskMod, questionCopy, 
                 questionDelete, questionTypeMod, questionSelectedMod, 

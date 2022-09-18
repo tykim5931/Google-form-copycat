@@ -4,14 +4,14 @@ export interface FormInfo {
 };
 
 export interface OptionItemProps {
-    id: number;         // option의 id or QuestionType id
-    content : string;   // option 내용 or QuestionType description
+    id: number;         // option의 id or QuestionType id(질문박스 타입 설정 시)
+    content : string;   // option 내용 or QuestionType description(질문박스 타입 설정 시)
 };
 
 interface OptionInfo {
     optionId: number;
     optionContent: string;
-    isLast: boolean;
+    isLast: boolean;    // 객관식 질문의 옵션에서 마지막 옵션인가
 }
 
 export const QUESTIONTYPES : OptionItemProps[] = [

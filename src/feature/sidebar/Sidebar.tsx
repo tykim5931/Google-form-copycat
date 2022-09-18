@@ -9,11 +9,15 @@ import './style.css'
 
 const SideBar = () => {
   const dispatch = useDispatch()
+  
+  // ============== Render QuestionBox ===============
   const isComplete = useSelector((state:RootState) => state.questions.isComplete)
   
+  // =========== Find HREF Location =================
   const location = useLocation()
   const isPreview = location.pathname === '/preview';
   
+  // =========== EventHandler ========================
   const onNewQuestionClicked = () => {
     const newQuestion = {
       id: nanoid(),
@@ -27,29 +31,24 @@ const SideBar = () => {
     dispatch(questionAdd(newQuestion))
   }
   const onInitializeForm = () => {
-    console.log("init!!")
     dispatch(questionInit(true));
   }
-  const initializeAns = () => {
+  const oninitializeAns = () => {
     dispatch(questionAnswerInit({}))
   }
-  
   const navigate = useNavigate();
-  const handleComplete = () => {
+  const onGetResultPage = () => {
     dispatch(questionCompleteCheck())
     if(isComplete) navigate('/result')
-    else {
-      console.log("필수항목 채우세요")
-    }
+    else return;
   };
-  
-  
+
   if(isPreview){
     return (
       <div>
         {!isComplete && <p className='alertMessage'>필수 항목에 답변하지 않았습니다.</p>}
         <div className="floatingContainer">
-          <button onClick={handleComplete}>
+          <button onClick={onGetResultPage}>
           <img src={require("../../assets/check_icon.png")} />
           <p className='btnTag'>제출하기</p>
           </button>
@@ -61,7 +60,7 @@ const SideBar = () => {
               </button>
           </Link>
 
-          <button onClick={initializeAns}>
+          <button onClick={oninitializeAns}>
           <img src={require("../../assets/erase_icon.png")} />
           <p className='btnTag'>답변 삭제</p>
           </button>

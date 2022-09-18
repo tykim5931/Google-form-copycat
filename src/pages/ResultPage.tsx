@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import QuestionList from "../feature/question/QuestionList";
-import { Question } from "../feature/interfaces";
+import { Question } from "../feature/featureTypes";
 import TitleBox from "../feature/title/TitleBox";
 import "../index.css"
 

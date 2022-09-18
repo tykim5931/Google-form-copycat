@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { RootState } from '../app/store';
-import { Question } from '../feature/interfaces';
+import { Question } from '../feature/featureTypes';
 
 import { questionAnswerMod} from "../feature/question/questionSlice";
 import "./style.css"
@@ -9,15 +9,18 @@ import "./style.css"
 
 const Narrative = ({ id, type }: Pick<Question, 'id' | 'type'>) => {
     const dispatch = useDispatch()
+    
+    // =========== Find HREF Location ================
     const location = useLocation()
+    const isPreview = location.pathname === '/preview';
+    const isResult = location.pathname === '/result';
 
+    // ============== Render QuestionList ===============
     const questions = useSelector((state:RootState) => state.questions.questionList)
     const question = questions.find((item) => item.id === id);
     if (!question) return null;
 
-    const isPreview = location.pathname === '/preview';
-    const isResult = location.pathname === '/result';
-
+    // ============= Event Handler =================
     const onAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(questionAnswerMod({ id: id, answer: e.target.value }));
     };

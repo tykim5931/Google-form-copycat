@@ -9,6 +9,7 @@ import './style.css'
 const QuestionList = () => {
     const dispatch = useDispatch()
 
+    // ============ QuestionList Rendering ==============
     const questions = useSelector((state:RootState) => state.questions.questionList)
     const renderedQuestions = questions.map((question, idx) => (
         <Draggable key={question.id} draggableId={question.id} index={idx}>
@@ -19,6 +20,8 @@ const QuestionList = () => {
             )}
         </Draggable>
     ))
+
+    // ============== Event Handlers ================
     const onDragEnd = (result: DropResult) => {
         if (!result.destination) {
           return;
